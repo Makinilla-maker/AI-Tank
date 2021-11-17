@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
 namespace Complete
 {
@@ -20,9 +21,12 @@ namespace Complete
         private float m_OriginalPitch;              // The pitch of the audio source at the start of the scene.
         private ParticleSystem[] m_particleSystems; // References to all the particles systems used by the Tanks
 
+        NavMeshAgent agent;
+        public Collider floor;
         private void Awake ()
         {
             m_Rigidbody = GetComponent<Rigidbody> ();
+            agent = this.GetComponent<NavMeshAgent>();
         }
 
 
@@ -105,24 +109,47 @@ namespace Complete
                     m_MovementAudio.Play();
                 }
             }
+            //Move ();
         }
 
 
         private void FixedUpdate ()
         {
             // Adjust the rigidbodies position and orientation in FixedUpdate.
-            Move ();
-            Turn ();
+            Move();
+           // Turn ();
         }
 
-
+        Vector3 wanderTarget = Vector3.zero;
         private void Move ()
         {
+            /*
             // Create a vector in the direction the tank is facing with a magnitude based on the input, speed and the time between frames.
             Vector3 movement = transform.forward * m_MovementInputValue * m_Speed * Time.deltaTime;
 
             // Apply this movement to the rigidbody's position.
             m_Rigidbody.MovePosition(m_Rigidbody.position + movement);
+            */
+            float wanderRadius = 10;
+            float wanderDistance = 10;
+            float wanderJitter = 1;
+
+            wanderTarget += new Vector3(Random.Range(-1.0f, 1.0f) * wanderJitter,
+                                        0,
+                                        Random.Range(-1.0f, 1.0f) * wanderJitter);
+            wanderTarget.Normalize();
+            wanderTarget *= wanderRadius;
+
+            Vector3 targetLocal = wanderTarget + new Vector3(0, 0, wanderDistance);
+            Vector3 targetWorld = this.gameObject.transform.InverseTransformVector(targetLocal);
+
+            if (!floor.bounds.Contains(targetWorld))
+            {
+                targetWorld = -transform.position * 0.1f;
+
+            };
+
+            agent.SetDestination(targetWorld);
         }
 
 
