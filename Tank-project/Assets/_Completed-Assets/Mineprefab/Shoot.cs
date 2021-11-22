@@ -10,6 +10,8 @@ public class Shoot : MonoBehaviour
     public Rigidbody m_Shell;   
 
     public float range;
+    public float frq;
+    int count;
 
     
     // Start is called before the first frame update
@@ -17,38 +19,53 @@ public class Shoot : MonoBehaviour
     {
         redCannon = GameObject.FindGameObjectWithTag("RedCannon").transform;
         blueCannon = GameObject.FindGameObjectWithTag("BlueCannon").transform;
+        count = 0;
+        frq = 2;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-        if(gameObject.tag == "RedCannon")
+        if(count == 0)
         {
-            RaycastHit hit;
-            if(Physics.Raycast(redCannon.position, redCannon.forward, out hit, range))
+            frq -= 0.5f * Time.deltaTime;
+            if(frq <= 0)
             {
-                Debug.Log(hit.transform.tag);
-
-                if(hit.transform.tag == "BlueTank" || hit.transform.tag == "BlueCannon")
+                frq += 2;
+                Reload();
+            }    
+                
+        }
+        else{
+            if(gameObject.tag == "RedCannon")
+            {
+                RaycastHit hit;
+                if(Physics.Raycast(redCannon.position, redCannon.forward, out hit, range))
                 {
-                    Debug.DrawLine(gameObject.transform.position,hit.transform.position,Color.red);
-                    ShootBullet();
-                }
+                   Debug.Log(hit.transform.tag);
+
+                   if(hit.transform.tag == "BlueTank" || hit.transform.tag == "BlueCannon")
+                   {
+                       Debug.DrawLine(gameObject.transform.position,hit.transform.position,Color.red);
+                     ShootBullet();
+                     count = 0;
+                 }
             }
         
-        }
-        else
-        {
-            RaycastHit hit2;
-            if(Physics.Raycast(blueCannon.position, blueCannon.forward, out hit2, range))
+            }
+            else
             {
-                Debug.Log(hit2.transform.tag);
-
-                if(hit2.transform.tag == "RedTank" || hit2.transform.tag == "RedCannon")
+                RaycastHit hit2;
+                if(Physics.Raycast(blueCannon.position, blueCannon.forward, out hit2, range))
                 {
-                    Debug.DrawLine(gameObject.transform.position,hit2.transform.position,Color.blue);
-                    ShootBullet();
+                    Debug.Log(hit2.transform.tag);
+
+                    if(hit2.transform.tag == "RedTank" || hit2.transform.tag == "RedCannon")
+                    {
+                        Debug.DrawLine(gameObject.transform.position,hit2.transform.position,Color.blue);
+                        ShootBullet();
+                        count = 0;
+                    }
                 }
             }
         }
@@ -60,5 +77,9 @@ public class Shoot : MonoBehaviour
 
             // Set the shell's velocity to the launch force in the fire position's forward direction.
             //shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward; 
+    }
+    void Reload()
+    {
+        count = 1;
     }
 }
