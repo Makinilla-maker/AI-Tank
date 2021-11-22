@@ -23,10 +23,12 @@ namespace Complete
 
         NavMeshAgent agent;
         public Collider floor;
+        public float freq;
         private void Awake ()
         {
             m_Rigidbody = GetComponent<Rigidbody> ();
             agent = this.GetComponent<NavMeshAgent>();
+            freq = 2;
         }
 
 
@@ -109,14 +111,19 @@ namespace Complete
                     m_MovementAudio.Play();
                 }
             }
-            //Move ();
+            /*freq -= Time.deltaTime;
+            if(freq <= 0)
+            {
+                freq +=1;
+            }*/
+            Move ();
         }
 
 
         private void FixedUpdate ()
         {
             // Adjust the rigidbodies position and orientation in FixedUpdate.
-            Move();
+            // Move ();
            // Turn ();
         }
 
