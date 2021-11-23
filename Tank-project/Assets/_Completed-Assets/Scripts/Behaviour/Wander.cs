@@ -55,7 +55,7 @@ namespace BBUnity.Actions
         Vector3 wanderTarget = Vector3.zero;
         public override TaskStatus OnUpdate()
         {
-            Debug.Log("wanderiiiiiiiiiiiiiiiing");
+            //Debug.Log("wanderiiiiiiiiiiiiiiiing");
             float wanderRadius = 10;
             float wanderDistance = 10;
             float wanderJitter = 1;

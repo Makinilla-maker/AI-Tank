@@ -19,16 +19,23 @@ namespace BBUnity.Actions
         [InParam("redCannon")]
         [Help("redCannon")]
         [SerializeField] private Transform redCannon;
-    
+
+        [InParam("enemyTank")]
+        [Help("enemyTank")]
+        [SerializeField] private Transform enemyTank;
+
         [InParam("m_Shell")]
         [Help("m_Shell")]
-        public Rigidbody m_Shell;   
+        public Rigidbody m_Shell;
+        
         [InParam("range")]
         [Help("range")]
         public float range;
+
         [InParam("frq")]
         [Help("frq")]
         public float frq;
+
         [InParam("count")]
         [Help("count")]
         int count;
@@ -38,7 +45,7 @@ namespace BBUnity.Actions
         public override void OnStart()
         {
             count = 0;
-            frq = 2;
+            frq = 3;
         }
 
         /// <summary>Method of Update of MoveToGameObject.</summary>
@@ -47,49 +54,30 @@ namespace BBUnity.Actions
         Vector3 wanderTarget = Vector3.zero;
         public override TaskStatus OnUpdate()
         {
-             if(count == 0)
-        {
-            frq -= 0.5f * Time.deltaTime;
-            if(frq <= 0)
+            if(count == 0)
             {
-                frq += 2;
-                Reload();
-            }    
-                
-        }
-        else{
-            if(gameObject.tag == "RedCannon")
+                frq -= 0.5f * Time.deltaTime;
+                if(frq <= 0)
+                {
+                    frq += 3;
+                    Reload();
+                }    
+            }   
+            else
             {
                 RaycastHit hit;
                 if(Physics.Raycast(redCannon.position, redCannon.forward, out hit, range))
                 {
-                   Debug.Log(hit.transform.tag);
+                    Debug.Log(hit.transform.tag);
 
-                   if(hit.transform.tag == "BlueTank" || hit.transform.tag == "BlueCannon")
-                   {
-                       Debug.DrawLine(gameObject.transform.position,hit.transform.position,Color.red);
-                     ShootBullet();
-                     count = 0;
-                 }
-            }
-        
-            }
-            else
-            {
-                RaycastHit hit2;
-                if(Physics.Raycast(blueCannon.position, blueCannon.forward, out hit2, range))
-                {
-                    Debug.Log(hit2.transform.tag);
-
-                    if(hit2.transform.tag == "RedTank" || hit2.transform.tag == "RedCannon")
+                    if(hit.transform.tag == "BlueTank" || hit.transform.tag == "BlueCannon")
                     {
-                        Debug.DrawLine(gameObject.transform.position,hit2.transform.position,Color.blue);
+                        Debug.DrawLine(gameObject.transform.position,hit.transform.position,Color.red);
                         ShootBullet();
                         count = 0;
                     }
                 }
             }
-        }
             return TaskStatus.RUNNING;
         }
         /// <summary>Abort method of MoveToGameObject </summary>
@@ -99,18 +87,35 @@ namespace BBUnity.Actions
 
         }
     
-    void ShootBullet()
-    {
-         Rigidbody shellInstance =
-                GameObject.Instantiate (m_Shell, gameObject.transform.position, gameObject.transform.rotation) as Rigidbody;
+        void ShootBullet()
+        {
+            float distX = Mathf.Abs((enemyTank.position.x - redCannon.position.x));
+            float distY = enemyTank.position.y - redCannon.position.y;
+            float distZ = Mathf.Abs((enemyTank.position.z - redCannon.position.z));
 
-            // Set the shell's velocity to the launch force in the fire position's forward direction.
-            //shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward; 
-    }
-    void Reload()
-    {
-        count = 1;
-    }
-    }
+            Vector2 distXZ = new Vector2(distX, distZ);
+            float norm = distXZ.magnitude;
 
+            float vel = 18f;
+
+            float insideRoot = Mathf.Abs(Mathf.Pow(vel, 4) - (Physics.gravity.y * (Physics.gravity.y * Mathf.Pow(norm, 2)) + (2 * distY * Mathf.Pow(vel, 2))));
+            float tan = (Mathf.Pow(vel, 2) + Mathf.Sqrt(insideRoot)) / (Physics.gravity.y * norm);
+            float angle = Mathf.Atan(Mathf.Abs(tan));
+            Debug.Log(angle * Mathf.Rad2Deg);
+
+            float velY = vel * Mathf.Sin(angle);
+            float velZ = vel * Mathf.Cos(angle);
+
+            Vector3 launchVel = new Vector3(0f, velY, velZ);
+
+            Rigidbody shellInstance = GameObject.Instantiate(m_Shell, redCannon.transform.position, redCannon.transform.rotation) as Rigidbody;
+            launchVel = shellInstance.transform.TransformDirection(launchVel);
+            shellInstance.AddForce(launchVel, ForceMode.Impulse);
+            
+        }
+        void Reload()
+        {
+            count = 1;
+        }
+    }
 }

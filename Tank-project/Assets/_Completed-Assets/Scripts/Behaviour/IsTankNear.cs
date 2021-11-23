@@ -44,12 +44,12 @@ namespace BBUnity.Conditions
             RaycastHit hit;
             if(Physics.Raycast(redCannon.position, redCannon.forward, out hit, closeDistance))
             {
-                Debug.Log(hit.transform.tag);
+                //Debug.Log(hit.transform.tag);
                 Debug.DrawLine(redCannon.position, hit.point, Color.red);
 
                 if(hit.transform.tag == "BlueTank" || hit.transform.tag == "BlueCannon")
                 {
-                    Debug.Log("I gocha u homie");
+                    //Debug.Log("I gocha u homie");
                       return true;
                 }
                 else
