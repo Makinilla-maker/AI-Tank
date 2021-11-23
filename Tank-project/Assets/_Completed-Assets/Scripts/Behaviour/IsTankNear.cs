@@ -49,7 +49,7 @@ namespace BBUnity.Conditions
 
                 if(hit.transform.tag == "BlueTank" || hit.transform.tag == "BlueCannon")
                 {
-                    Debug.Log("a");
+                    Debug.Log("I gocha u homie");
                       return true;
                 }
                 else
