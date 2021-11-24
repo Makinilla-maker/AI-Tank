@@ -6,16 +6,15 @@ namespace BBUnity.Conditions
     /// <summary>
     /// It is a perception condition to check if the objective is close depending on a given distance.
     /// </summary>
-    [Condition("IsTankNear")]
+    [Condition("Is Tank Near Blue")]
     [Help("Checks whether the enemy tank is near")]
-    public class IsTankNear : GOCondition
+    public class IsTankNearBlue : GOCondition
     {
         ///<value>Input Target Parameter to to check the distance.</value>
         [InParam("Tank")]
         [Help("Target to check the distance")]
         public GameObject tank;
  
-
         ///<value>Input maximun distance Parameter to consider that the target is close.</value>
         [InParam("closeDistance")]
         [Help("The maximun distance to consider that the target is close")]
@@ -37,12 +36,12 @@ namespace BBUnity.Conditions
         public override bool Check()
         {
             RaycastHit hit;
-            if(Physics.Raycast(redCannon.position, redCannon.forward, out hit, closeDistance))
+            if(Physics.Raycast(blueCannon.position, blueCannon.forward, out hit, closeDistance))
             {
                 //Debug.Log(hit.transform.tag);
-                Debug.DrawLine(redCannon.position, hit.point, Color.red);
+                Debug.DrawLine(blueCannon.position, hit.point, Color.blue);
 
-                if(hit.transform.tag == "BlueTank" || hit.transform.tag == "BlueCannon")
+                if(hit.transform.tag == "RedTank" || hit.transform.tag == "RedCannon")
                 {
                     //Debug.Log("I gocha u homie");
                     return true;

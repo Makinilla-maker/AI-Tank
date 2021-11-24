@@ -7,9 +7,9 @@ namespace BBUnity.Actions
     /// <summary>
     /// It is an action to move towards the given goal using a NavMeshAgent.
     /// </summary>
-    [Action("Shot")]
-    [Help("Moves with wander")]
-    public class Shot : GOAction
+    [Action("Shot Red")]
+    [Help("Cannon shots")]
+    public class ShotRed : GOAction
     {
         ///<value>Input target game object towards this game object will be moved Parameter.</value>
         [InParam("blueCannon")]
@@ -44,13 +44,12 @@ namespace BBUnity.Actions
         /// <remarks>Check if GameObject object exists and NavMeshAgent, if there is no NavMeshAgent, the default one is added.</remarks>
         public override void OnStart()
         {
-            frq = 2f;
+            frq = 10f;
         }
 
         /// <summary>Method of Update of MoveToGameObject.</summary>
         /// <remarks>Verify the status of the task, if there is no objective fails, if it has traveled the road or is near the goal it is completed
         /// y, the task is running, if it is still moving to the target.</remarks>
-        Vector3 wanderTarget = Vector3.zero;
         public override TaskStatus OnUpdate()
         {
             count = GameObject.Find("Soviet Tank").GetComponent<BulletManager>().bullets.Count;
@@ -59,17 +58,14 @@ namespace BBUnity.Actions
                 RaycastHit hit;
                 if(Physics.Raycast(redCannon.position, redCannon.forward, out hit, range))
                 {
-                    //Debug.Log(hit.transform.tag);
-
                     if(hit.transform.tag == "BlueTank" || hit.transform.tag == "BlueCannon")
                     {
-                        //Debug.DrawLine(gameObject.transform.position,hit.transform.position,Color.red);
-                        frq -= 0.5f * Time.deltaTime;
+                        frq -= 0.1f;
                         if (frq <= 0)
                         {
-                            ShootBullet();
+                            ShootBulletRed();
                             GameObject.Find("Soviet Tank").GetComponent<BulletManager>().bullets.RemoveAt(0);
-                            frq += 2f;
+                            frq += 10f;
                         }
                     }
                 }
@@ -83,7 +79,7 @@ namespace BBUnity.Actions
 
         }
     
-        void ShootBullet()
+        void ShootBulletRed()
         {
             float distX = Mathf.Abs((enemyTank.position.x - redCannon.position.x));
             float distY = enemyTank.position.y - redCannon.position.y;
@@ -91,13 +87,14 @@ namespace BBUnity.Actions
 
             Vector2 distXZ = new Vector2(distX, distZ);
             float norm = distXZ.magnitude;
+            Debug.Log("Red distance " + norm);
 
             float vel = 18f;
 
             float insideRoot = Mathf.Abs(Mathf.Pow(vel, 4) - (Physics.gravity.y * (Physics.gravity.y * Mathf.Pow(norm, 2)) + (2 * distY * Mathf.Pow(vel, 2))));
             float tan = (Mathf.Pow(vel, 2) + Mathf.Sqrt(insideRoot)) / (Physics.gravity.y * norm);
             float angle = Mathf.Atan(Mathf.Abs(tan));
-            Debug.Log(angle * Mathf.Rad2Deg);
+            Debug.Log("Red " + angle * Mathf.Rad2Deg);
 
             float velY = vel * Mathf.Sin(angle);
             float velZ = vel * Mathf.Cos(angle);

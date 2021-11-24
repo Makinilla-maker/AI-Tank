@@ -7,9 +7,9 @@ namespace BBUnity.Actions
     /// <summary>
     /// It is an action to move towards the given goal using a NavMeshAgent.
     /// </summary>
-    [Action("Reload Trip")]
+    [Action("Reload Trip Blue")]
     [Help("Moves to a specifical position to perform the reload")]
-    public class ReloadTrip : GOAction
+    public class ReloadTripBlue : GOAction
     {
         ///<value>Input target game object towards this game object will be moved Parameter.</value>
         [InParam("target")]
@@ -48,7 +48,6 @@ namespace BBUnity.Actions
         /// <summary>Method of Update of MoveToGameObject.</summary>
         /// <remarks>Verify the status of the task, if there is no objective fails, if it has traveled the road or is near the goal it is completed
         /// y, the task is running, if it is still moving to the target.</remarks>
-        Vector3 wanderTarget = Vector3.zero;
         public override TaskStatus OnUpdate()
         {
             agent.SetDestination(target.transform.position);
@@ -61,7 +60,7 @@ namespace BBUnity.Actions
                 freq -= (0.5f * Time.deltaTime);
                 if(freq <= 0f)
                 {
-                    GameObject.Find("Soviet Tank").GetComponent<BulletManager>().AddBullets();
+                    GameObject.Find("Dictator Tank").GetComponent<BulletManager>().AddBullets();
                     freq += 3f;
                 }
             }

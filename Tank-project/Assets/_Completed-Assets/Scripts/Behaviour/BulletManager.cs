@@ -25,5 +25,5 @@ public class BulletManager : MonoBehaviour
         {
             bullets.Add(prefab);
         }
-    }
+    } 
 }

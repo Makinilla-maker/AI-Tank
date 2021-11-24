@@ -6,9 +6,9 @@ namespace BBUnity.Conditions
     /// <summary>
     /// It is a perception condition to check if the objective is close depending on a given distance.
     /// </summary>
-    [Condition("DoIHaveBullets?")]
+    [Condition("Do I Have Bullets Red?")]
     [Help("Checks the number of bullets and decides to go to the reload point or not")]
-    public class BulletsCounter : GOCondition
+    public class BulletsCounterRed : GOCondition
     {
         /// <summary>
         /// Checks whether a target is close depending on a given distance,
