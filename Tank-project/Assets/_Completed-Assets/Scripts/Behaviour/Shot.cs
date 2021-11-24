@@ -53,16 +53,8 @@ namespace BBUnity.Actions
         Vector3 wanderTarget = Vector3.zero;
         public override TaskStatus OnUpdate()
         {
-            if(count == 0)
-            {
-                frq -= 0.5f * Time.deltaTime;
-                if(frq <= 0)
-                {
-                    frq += 3f;
-                    Reload();
-                }    
-            }   
-            else
+            count = GameObject.Find("Soviet Tank").GetComponent<BulletManager>().bullets.Count;
+            if(count > 0)
             {
                 RaycastHit hit;
                 if(Physics.Raycast(redCannon.position, redCannon.forward, out hit, range))
@@ -76,7 +68,7 @@ namespace BBUnity.Actions
                         if (frq <= 0)
                         {
                             ShootBullet();
-                            count--;
+                            GameObject.Find("Soviet Tank").GetComponent<BulletManager>().bullets.RemoveAt(0);
                             frq += 2f;
                         }
                     }
@@ -116,10 +108,6 @@ namespace BBUnity.Actions
             launchVel = shellInstance.transform.TransformDirection(launchVel);
             shellInstance.AddForce(launchVel, ForceMode.Impulse);
             
-        }
-        void Reload()
-        {
-            count += 3;
         }
     }
 }

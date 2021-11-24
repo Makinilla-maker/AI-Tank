@@ -23,13 +23,12 @@ namespace BBUnity.Conditions
 
         [InParam("RedCannon")]
         [Help("RedCannon")]
-
         public Transform redCannon;
 
         [InParam("BlueCannon")]
         [Help("BlueCannon")]
-
         public Transform blueCannon;
+
         /// <summary>
         /// Checks whether a target is close depending on a given distance,
         /// calculates the magnitude between the gameobject and the target and then compares with the given distance.
