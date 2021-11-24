@@ -44,7 +44,7 @@ namespace BBUnity.Actions
         /// <remarks>Check if GameObject object exists and NavMeshAgent, if there is no NavMeshAgent, the default one is added.</remarks>
         public override void OnStart()
         {
-            frq = 10f;
+            frq = 30f;
         }
 
         /// <summary>Method of Update of MoveToGameObject.</summary>
@@ -65,7 +65,7 @@ namespace BBUnity.Actions
                         {
                             ShootBulletBlue();
                             GameObject.Find("Dictator Tank").GetComponent<BulletManager>().bullets.RemoveAt(0);
-                            frq += 10f;
+                            frq += 30f;
                         }
                     }
                 }
