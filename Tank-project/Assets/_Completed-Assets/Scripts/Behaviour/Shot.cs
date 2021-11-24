@@ -38,14 +38,13 @@ namespace BBUnity.Actions
 
         [InParam("count")]
         [Help("count")]
-        int count;
+        [SerializeField] private int count;
 
         /// <summary>Initialization Method of MoveToGameObject.</summary>
         /// <remarks>Check if GameObject object exists and NavMeshAgent, if there is no NavMeshAgent, the default one is added.</remarks>
         public override void OnStart()
         {
-            count = 0;
-            frq = 3;
+            frq = 2f;
         }
 
         /// <summary>Method of Update of MoveToGameObject.</summary>
@@ -59,7 +58,7 @@ namespace BBUnity.Actions
                 frq -= 0.5f * Time.deltaTime;
                 if(frq <= 0)
                 {
-                    frq += 3;
+                    frq += 3f;
                     Reload();
                 }    
             }   
@@ -68,13 +67,18 @@ namespace BBUnity.Actions
                 RaycastHit hit;
                 if(Physics.Raycast(redCannon.position, redCannon.forward, out hit, range))
                 {
-                    Debug.Log(hit.transform.tag);
+                    //Debug.Log(hit.transform.tag);
 
                     if(hit.transform.tag == "BlueTank" || hit.transform.tag == "BlueCannon")
                     {
-                        Debug.DrawLine(gameObject.transform.position,hit.transform.position,Color.red);
-                        ShootBullet();
-                        count = 0;
+                        //Debug.DrawLine(gameObject.transform.position,hit.transform.position,Color.red);
+                        frq -= 0.5f * Time.deltaTime;
+                        if (frq <= 0)
+                        {
+                            ShootBullet();
+                            count--;
+                            frq += 2f;
+                        }
                     }
                 }
             }
@@ -115,7 +119,7 @@ namespace BBUnity.Actions
         }
         void Reload()
         {
-            count = 1;
+            count += 3;
         }
     }
 }

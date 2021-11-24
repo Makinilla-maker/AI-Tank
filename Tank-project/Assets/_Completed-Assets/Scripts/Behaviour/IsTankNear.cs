@@ -35,10 +35,6 @@ namespace BBUnity.Conditions
         /// calculates the magnitude between the gameobject and the target and then compares with the given distance.
         /// </summary>
         /// <returns>True if the magnitude between the gameobject and de target is lower that the given distance.</returns>
-        public void Start()
-        {
-            
-        }
         public override bool Check()
         {
             RaycastHit hit;
@@ -50,7 +46,7 @@ namespace BBUnity.Conditions
                 if(hit.transform.tag == "BlueTank" || hit.transform.tag == "BlueCannon")
                 {
                     //Debug.Log("I gocha u homie");
-                      return true;
+                    return true;
                 }
                 else
                 {
