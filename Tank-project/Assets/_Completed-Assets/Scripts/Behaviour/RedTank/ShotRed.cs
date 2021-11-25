@@ -32,10 +32,6 @@ namespace BBUnity.Actions
         [Help("range")]
         public float range;
 
-        [InParam("frq")]
-        [Help("frq")]
-        public float frq;
-
         [InParam("count")]
         [Help("count")]
         [SerializeField] private int count;
@@ -44,7 +40,7 @@ namespace BBUnity.Actions
         /// <remarks>Check if GameObject object exists and NavMeshAgent, if there is no NavMeshAgent, the default one is added.</remarks>
         public override void OnStart()
         {
-            frq = 30f;
+
         }
 
         /// <summary>Method of Update of MoveToGameObject.</summary>
@@ -60,12 +56,12 @@ namespace BBUnity.Actions
                 {
                     if(hit.transform.tag == "BlueTank" || hit.transform.tag == "BlueCannon")
                     {
-                        frq -= 0.1f;
-                        if (frq <= 0)
+                        
+                        if (!GameObject.Find("CompleteShell(Clone)"))
                         {
                             ShootBulletRed();
                             GameObject.Find("Soviet Tank").GetComponent<BulletManager>().bullets.RemoveAt(0);
-                            frq += 30f;
+                           
                         }
                     }
                 }

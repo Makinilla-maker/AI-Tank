@@ -32,24 +32,17 @@ namespace BBUnity.Actions
         [Help("range")]
         public float range;
 
-        [InParam("frq")]
-        [Help("frq")]
-        public float frq;
-
         [InParam("count")]
         [Help("count")]
         [SerializeField] private int count;
 
-        /// <summary>Initialization Method of MoveToGameObject.</summary>
-        /// <remarks>Check if GameObject object exists and NavMeshAgent, if there is no NavMeshAgent, the default one is added.</remarks>
+        
         public override void OnStart()
         {
-            frq = 30f;
+            
         }
 
-        /// <summary>Method of Update of MoveToGameObject.</summary>
-        /// <remarks>Verify the status of the task, if there is no objective fails, if it has traveled the road or is near the goal it is completed
-        /// y, the task is running, if it is still moving to the target.</remarks>
+       
         public override TaskStatus OnUpdate()
         {
             count = GameObject.Find("Dictator Tank").GetComponent<BulletManager>().bullets.Count;
@@ -60,20 +53,17 @@ namespace BBUnity.Actions
                 {
                     if(hit.transform.tag == "RedTank" || hit.transform.tag == "RedCannon")
                     {
-                        frq -= 0.1f;
-                        if (frq <= 0)
+                        if (!GameObject.Find("CompleteShell Blue 1(Clone)"))
                         {
                             ShootBulletBlue();
                             GameObject.Find("Dictator Tank").GetComponent<BulletManager>().bullets.RemoveAt(0);
-                            frq += 30f;
                         }
                     }
                 }
             }
             return TaskStatus.RUNNING;
         }
-        /// <summary>Abort method of MoveToGameObject </summary>
-        /// <remarks>When the task is aborted, it stops the navAgentMesh.</remarks>
+       
         public override void OnAbort()
         {
 
