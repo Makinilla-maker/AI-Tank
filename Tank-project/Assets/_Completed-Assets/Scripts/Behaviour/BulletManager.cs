@@ -5,6 +5,8 @@ using UnityEngine;
 public class BulletManager : MonoBehaviour
 {
     [SerializeField] public List<GameObject> bullets = null;
+
+    public AudioSource realoadAudio;
     public GameObject prefab;
     // Start is called before the first frame update
     void Start()
@@ -23,6 +25,7 @@ public class BulletManager : MonoBehaviour
     {
         for (int i = 1; i <= 3; ++i)
         {
+            realoadAudio.Play();
             bullets.Add(prefab);
         }
     } 
